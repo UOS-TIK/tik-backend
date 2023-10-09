@@ -1,6 +1,8 @@
 package com.tik.server.dto
 
-class UserRequestDto
-{
-
-}
+data class UserRequestDto(
+    val id: Long?,
+    val email: String,
+    val password: String,
+    val userName: String
+)
