@@ -5,14 +5,11 @@ import jakarta.persistence.*
 @Table(name = "tech_stack")
 @Entity
 class TechStack(
-    name: String
+    @Column(name = "name")
+    var name: String
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     val id: Int? = null
-
-    @Column(name = "name")
-    var name: String = name
-        protected set
 }

@@ -1,11 +1,13 @@
 package com.tik.server.entity
 
 import jakarta.persistence.*
+import java.util.*
 
 @Table(name = "resume")
 @Entity
 class Resume(
-    name: String
+    @Column(name = "name")
+    var name: String
 ) : BaseTimeEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,8 +15,10 @@ class Resume(
     val id: Int? = null
 
     // todo: user_id 추가(ManyToOne)
+    @Column(name = "user_id", nullable = false)
+    var userId: Int = 1
 
-    @Column(name = "name")
-    var name: String = name
+    @OneToMany(mappedBy = "resume", fetch = FetchType.LAZY)
+    var project: MutableList<Project> = ArrayList()
         protected set
 }
