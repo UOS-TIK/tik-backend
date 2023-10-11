@@ -11,7 +11,7 @@ class ProjectTechStack(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    val id: Long = 0
+    val id: Int? = null
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     var project: Project = project

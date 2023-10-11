@@ -10,7 +10,7 @@ class Resume(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    val id: Long = 0
+    val id: Int? = null
 
     // todo: user_id 추가(ManyToOne)
 
