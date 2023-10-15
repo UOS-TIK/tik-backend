@@ -7,6 +7,7 @@ import com.tik.server.entity.TechStack
 data class ResumeDetail(
     val id: Int?, // todo: userId 추가
     val name: String,
+    val introduction: String,
     val projects: List<ProjectDetail>
 ) {
     companion object {
@@ -14,6 +15,7 @@ data class ResumeDetail(
             return ResumeDetail(
                 id = resume.id,
                 name = resume.name,
+                introduction = resume.introduction,
                 projects = resume.project.map {
                     ProjectDetail.from(it)
                 }

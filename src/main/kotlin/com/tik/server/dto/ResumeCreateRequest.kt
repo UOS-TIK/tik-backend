@@ -7,6 +7,9 @@ class ResumeCreateRequest {
     lateinit var name: String
         private set
 
+    lateinit var introduction: String
+        private set
+
     lateinit var projects: MutableList<ProjectDto>
         private set
 

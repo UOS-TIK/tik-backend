@@ -6,17 +6,18 @@ import java.util.*
 @Table(name = "resume")
 @Entity
 class Resume(
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    var user: User,
     @Column(name = "name")
-    var name: String
+    var name: String,
+    @Column(name = "introduction")
+    var introduction: String
 ) : BaseTimeEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     val id: Int? = null
-
-    // todo: user_id 추가(ManyToOne)
-    @Column(name = "user_id", nullable = false)
-    var userId: Int = 1
 
     @OneToMany(mappedBy = "resume", fetch = FetchType.LAZY)
     var project: MutableList<Project> = ArrayList()

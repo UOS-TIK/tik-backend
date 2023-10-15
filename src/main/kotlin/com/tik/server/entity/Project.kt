@@ -23,4 +23,10 @@ class Project(
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     var projectTechStack: MutableList<ProjectTechStack> = ArrayList()
+
+    fun updateProject(name: String, summary: String, description: String) {
+        this.name = name
+        this.summary = summary
+        this.description = description
+    }
 }
