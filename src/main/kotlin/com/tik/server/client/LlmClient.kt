@@ -31,47 +31,49 @@ class LlmClient(
         )
         .build()
 
-    private suspend inline fun <reified T : Any> WebClient.ResponseSpec.call(): Base<T> {
+    private suspend inline fun <reified T : Base.Response, reified U : Base.Exception> WebClient.ResponseSpec.call(): Base<T, U> {
         return try {
             Base(
                 data = this.awaitBody(),
                 error = null
             )
         } catch (err: WebClientResponseException) {
-            val response = err.getResponseBodyAs(Map::class.java) ?: throw Exception("exception")
+            val response = err.getResponseBodyAs(Map::class.java) ?: throw Exception("invalid response data type.")
 
             Base(
                 data = null,
-                error = Base.Error(
-                    statusCode = response["statusCode"] as Int,
-                    name = response["name"] as String,
-                    message = response["message"] as String,
-                )
+                error = Base.Exception.getByMessage(U::class.java, response["message"] as String),
             )
         } catch (err: Throwable) {
+            print("[unhandled exception] ${err.message}")
             Base(
                 data = null,
-                error = Base.Error(
-                    statusCode = 500,
-                    name = "INTERNAL_SERVER_ERROR",
-                    message = "internal server error"
-                )
+                error = Base.Exception.getByMessage(U::class.java, Base.Exception.INTERNAL_SERVER_ERROR_MESSAGE),
             )
         }
     }
 
-    data class Base<T>(
+    data class Base<T : Base.Response, U : Base.Exception>(
         val data: T?,
-        val error: Error?
+        val error: U?
     ) {
-        data class Error(
-            val statusCode: Int,
-            val name: String,
+        interface Response
+
+        interface Exception {
             val message: String
-        )
+
+            companion object {
+                const val INTERNAL_SERVER_ERROR_MESSAGE = "internal server error."
+
+                fun <T : Exception> getByMessage(enumClass: Class<T>, message: String): T {
+                    val enumMap = enumClass.enumConstants.associateBy { it.message }
+                    return enumMap[message] ?: throw java.lang.Exception(message)
+                }
+            }
+        }
     }
 
-    suspend fun initInterview(body: InitInterview.Body): Base<InitInterview.Response> {
+    suspend fun initInterview(body: InitInterview.Body): Base<InitInterview.Response, InitInterview.Exception> {
         return client
             .post()
             .uri("/init")
@@ -92,10 +94,17 @@ class LlmClient(
 
         data class Response(
             val interviewId: Int
-        )
+        ) : Base.Response
+
+        enum class Exception(override val message: String) : Base.Exception {
+            INTERVIEW_STARTED("interview is already started."),
+            INVALID_ID("invalid interviewId."),
+            INTERVIEW_LOCKED("interview is locked."),
+            INTERNAL_SERVER(Base.Exception.INTERNAL_SERVER_ERROR_MESSAGE);
+        }
     }
 
-    suspend fun speakToInterviewer(body: SpeakToInterviewer.Body): Base<SpeakToInterviewer.Response> {
+    suspend fun speakToInterviewer(body: SpeakToInterviewer.Body): Base<SpeakToInterviewer.Response, SpeakToInterviewer.Exception> {
         return client
             .post()
             .uri("/speak")
@@ -112,10 +121,18 @@ class LlmClient(
 
         data class Response(
             val reply: String
-        )
+        ) : Base.Response
+
+        enum class Exception(override val message: String) : Base.Exception {
+            INTERVIEW_NOT_INITED("interview is not initialized."),
+            INTERVIEW_FINISHED("interview is finished."),
+            INVALID_ID("invalid interviewId."),
+            INTERVIEW_LOCKED("interview is locked."),
+            INTERNAL_SERVER(Base.Exception.INTERNAL_SERVER_ERROR_MESSAGE);
+        }
     }
 
-    suspend fun finishInterview(body: FinishInterview.Body): Base<FinishInterview.Response> {
+    suspend fun finishInterview(body: FinishInterview.Body): Base<FinishInterview.Response, FinishInterview.Exception> {
         return client
             .post()
             .uri("/finish")
@@ -132,7 +149,7 @@ class LlmClient(
         data class Response(
             val interviewHistory: List<String>,
             val interviewPaper: InterviewPaper
-        )
+        ) : Base.Response
 
         data class InterviewPaper(
             val items: List<Item>,
@@ -157,6 +174,14 @@ class LlmClient(
             val answer: String,
             val evaluation: Evaluation
         )
+
+        enum class Exception(override val message: String) : Base.Exception {
+            INTERVIEW_NOT_INITED("interview is not initialized."),
+            INTERVIEW_NOT_FINISHED("interview is not finished."),
+            INVALID_ID("invalid interviewId."),
+            INTERVIEW_LOCKED("interview is locked."),
+            INTERNAL_SERVER(Base.Exception.INTERNAL_SERVER_ERROR_MESSAGE);
+        }
     }
 }
 
