@@ -5,7 +5,7 @@ import com.tik.server.entity.Resume
 import com.tik.server.entity.TechStack
 
 data class ResumeDetail(
-    val id: Int?, // todo: userId 추가
+    val id: Int?, // todo: memberId 추가
     val name: String,
     val introduction: String,
     val projects: List<ProjectDetail>

@@ -7,8 +7,8 @@ import java.util.*
 @Entity
 class Resume(
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
-    var user: User,
+    @JoinColumn(name = "member_id", nullable = false)
+    var member: Member,
     @Column(name = "name")
     var name: String,
     @Column(name = "introduction")
