@@ -21,8 +21,8 @@ class ResumeController(
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    fun findAllResume(@RequestParam(name = "userId") userId: Int): List<ResumeDetail> {
-        return resumeService.findAllResume(userId)
+    fun findAllResume(@RequestParam(name = "memberId") memberId: Int): List<ResumeDetail> {
+        return resumeService.findAllResume(memberId)
     }
 
     @DeleteMapping("/delete/{resumeId}")
