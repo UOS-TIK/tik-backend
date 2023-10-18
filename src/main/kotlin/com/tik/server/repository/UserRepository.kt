@@ -9,5 +9,7 @@ interface UserRepository : JpaRepository<User, Long> {
 // email로 중복검사
     fun findByEmail(email:String): User?
 
+    fun findById(id: Int): User?
+
 }
 
