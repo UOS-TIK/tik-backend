@@ -45,7 +45,7 @@ class LlmClient(
                 error = Base.Exception.getByMessage(U::class.java, response["message"] as String),
             )
         } catch (err: Throwable) {
-            print("[unhandled exception] ${err.message}")
+            print("[unknown exception] ${err.message}")
             Base(
                 data = null,
                 error = Base.Exception.getByMessage(U::class.java, Base.Exception.INTERNAL_SERVER_ERROR_MESSAGE),
@@ -67,7 +67,12 @@ class LlmClient(
 
                 fun <T : Exception> getByMessage(enumClass: Class<T>, message: String): T {
                     val enumMap = enumClass.enumConstants.associateBy { it.message }
-                    return enumMap[message] ?: throw java.lang.Exception(message)
+                    if(enumMap[message] != null){
+                        return enumMap[message] as T
+                    }
+
+                    print("[unhandled exception] $message")
+                    return enumMap[INTERNAL_SERVER_ERROR_MESSAGE] as T
                 }
             }
         }

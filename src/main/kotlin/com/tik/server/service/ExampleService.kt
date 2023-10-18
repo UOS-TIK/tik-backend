@@ -20,7 +20,7 @@ class ExampleService(
 
         val res2 = llmClient.finishInterview(
             body = LlmClient.FinishInterview.Body(
-                interviewId = 0
+                interviewId = -123
             )
         )
         if (res2.data != null) {
