@@ -27,7 +27,7 @@ class ResumeController(
 
     @DeleteMapping("/delete/{resumeId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    fun deleteResume(@PathVariable resumeId: Long) {
+    fun deleteResume(@PathVariable resumeId: Int) {
         resumeService.deleteResume(resumeId)
     }
 

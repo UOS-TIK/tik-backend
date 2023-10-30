@@ -45,7 +45,7 @@ class ResumeService(
         }
     }
 
-    fun deleteResume(resumeId: Long) {
+    fun deleteResume(resumeId: Int) {
         return resumeRepository.deleteById(resumeId)
     }
 }
