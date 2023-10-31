@@ -33,4 +33,7 @@ class InterviewHistory(
 
     @Column(name = "end_time")
     var endTime: LocalDateTime? = null
+
+    @OneToMany(mappedBy = "interviewHistory" , cascade = [CascadeType.ALL])
+    var questions: MutableList<Question> = mutableListOf()
 }
