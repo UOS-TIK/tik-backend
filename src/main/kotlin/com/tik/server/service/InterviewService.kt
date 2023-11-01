@@ -80,7 +80,7 @@ class InterviewService(
         }.orElseThrow {
             throw Exception("invalid interviewId.")
         }
-        
+
         val res = llmClient.finishInterview(
             body = LlmClient.FinishInterview.Body(
                 interviewId = request.interviewId
@@ -89,7 +89,7 @@ class InterviewService(
 
         if (res.data == null || res.error != null) {
             when (res.error) {
-                LlmClient.FinishInterview.Exception.INTERVIEW_LOCKED -> return FinishInterviewResponse(interviewId = request.interviewId)
+                LlmClient.FinishInterview.Exception.INTERVIEW_LOCKED -> return FinishInterviewResponse(status = "처리중")
                 else -> throw Exception("invalid interviewId.")
             }
         }
@@ -125,6 +125,6 @@ class InterviewService(
             interviewHistoryRepository.save(interviewHistory)
         }
 
-        return FinishInterviewResponse(interviewId = request.interviewId)
+        return FinishInterviewResponse(status = "완료")
     }
 }
