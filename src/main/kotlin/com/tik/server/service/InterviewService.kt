@@ -8,6 +8,8 @@ import com.tik.server.dto.InterviewQuestion
 import com.tik.server.entity.InterviewHistory
 import com.tik.server.repository.InterviewHistoryRepository
 import com.tik.server.repository.ResumeRepository
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.withContext
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -19,21 +21,25 @@ class InterviewService(
 ) {
     @Transactional
     suspend fun initInterview(request: InterviewCreateRequest): InterviewCreateResponse {
-        val resume = resumeRepository.findById(request.resumeId.toInt()).orElse(null)
-            ?: throw IllegalStateException("이력서가 존재하지 않습니다.")
+        val resume = withContext(IO) {
+            resumeRepository.findById(request.resumeId.toInt()).orElse(null)
+                ?: throw IllegalStateException("이력서가 존재하지 않습니다.")
+        }
 
         var techStack: String = resume.name + "\n" + resume.introduction + "\n"
         resume.project.forEach {
             techStack += it.name + "\n" + it.summary + "\n" + it.description + "\n"
         }
 
-        val interviewHistory = interviewHistoryRepository.save(
-            InterviewHistory(
-                resume = resume,
-                jobDescription = request.jobDescription,
-                company = request.company
+        val interviewHistory = withContext(IO) {
+            interviewHistoryRepository.save(
+                InterviewHistory(
+                    resume = resume,
+                    jobDescription = request.jobDescription,
+                    company = request.company
+                )
             )
-        )
+        }
 
         val response = llmClient.initInterview(
             body = LlmClient.InitInterview.Body(
