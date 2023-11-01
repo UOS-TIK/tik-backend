@@ -1,5 +1,6 @@
 package com.tik.server.entity
 
+import com.tik.server.dto.HistoryResponseList
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -33,4 +34,5 @@ class InterviewHistory(
 
     @Column(name = "end_time")
     var endTime: LocalDateTime? = null
+
 }

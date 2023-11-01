@@ -1,10 +1,13 @@
 package com.tik.server.security
 
+import com.tik.server.service.CustomUserDetailService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
@@ -12,9 +15,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector
 
+
+// 인증 인가 관리 config
 @Configuration
 @EnableWebSecurity
-class SecurityConfig(private val jwtTokenProvider: JwtTokenProvider) {
+class SecurityConfig(
+    private val jwtTokenProvider: JwtTokenProvider)
+{
 
     // 필터 설정
     @Bean
@@ -32,7 +39,10 @@ class SecurityConfig(private val jwtTokenProvider: JwtTokenProvider) {
                     .requestMatchers(MvcRequestMatcher(introspector, "/user/signIn")).anonymous()
     // 그외 /resume로 시작하는 모든 요청은 MEMBER 권한이 있어야 접근 가능
                     .requestMatchers(MvcRequestMatcher(introspector, "/resume/**")).hasRole("MEMBER")
-    // 그외 요청은 권한 없이 모두 접근 가능
+                    .requestMatchers(MvcRequestMatcher(introspector, "/interview/**")).hasRole("MEMBER")
+                    .requestMatchers(MvcRequestMatcher(introspector, "/history/**")).hasRole("MEMBER")
+
+                    // 그외 요청은 권한 없이 모두 접근 가능
                     .anyRequest().permitAll()
             }
 
@@ -52,4 +62,6 @@ class SecurityConfig(private val jwtTokenProvider: JwtTokenProvider) {
     @Bean
     fun passwordEncoder(): PasswordEncoder =
         PasswordEncoderFactories.createDelegatingPasswordEncoder()
+
+
 }

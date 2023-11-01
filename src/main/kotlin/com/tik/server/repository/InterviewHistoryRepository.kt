@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface InterviewHistoryRepository: JpaRepository<InterviewHistory, Int> {
+
+    fun findAllByResumeId(resumeId: Int): List<InterviewHistory>
+
 }
