@@ -76,25 +76,20 @@ class InterviewService(
         val interviewHistory = withContext(Dispatchers.IO) {
             interviewHistoryRepository.findById(request.interviewId)
         }.filter {
-            // TODO: it.resume.member.id == userId 조건
             it.comment == null
         }.orElseThrow {
             throw Exception("invalid interviewId.")
         }
-
+        
         val res = llmClient.finishInterview(
             body = LlmClient.FinishInterview.Body(
                 interviewId = request.interviewId
             )
         )
 
-        if (res.data == null || res.error !== null) {
-            // TODO: 예외처리
+        if (res.data == null || res.error != null) {
             when (res.error) {
-                LlmClient.FinishInterview.Exception.INTERVIEW_NOT_INITED -> throw Exception("invalid interviewId.")
-                LlmClient.FinishInterview.Exception.INTERVIEW_NOT_FINISHED -> throw Exception("invalid interviewId.")
-                LlmClient.FinishInterview.Exception.INVALID_ID -> throw Exception("invalid interviewId.")
-                LlmClient.FinishInterview.Exception.INTERVIEW_LOCKED -> throw Exception("invalid interviewId.")
+                LlmClient.FinishInterview.Exception.INTERVIEW_LOCKED -> return FinishInterviewResponse(interviewId = request.interviewId)
                 else -> throw Exception("invalid interviewId.")
             }
         }
