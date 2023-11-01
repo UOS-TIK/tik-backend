@@ -1,15 +1,16 @@
 package com.tik.server.service
 
 import com.tik.server.client.LlmClient
-import com.tik.server.dto.InterviewAnswerRequest
-import com.tik.server.dto.InterviewCreateRequest
-import com.tik.server.dto.InterviewCreateResponse
-import com.tik.server.dto.InterviewQuestion
+import com.tik.server.dto.*
 import com.tik.server.entity.InterviewHistory
+import com.tik.server.entity.Question
 import com.tik.server.repository.InterviewHistoryRepository
 import com.tik.server.repository.ResumeRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 
 @Service
 class InterviewService(
@@ -69,5 +70,61 @@ class InterviewService(
             // todo: error=interview finished 상태일 때 처리
             throw IllegalStateException(response.error?.message)
         }
+    }
+
+    suspend fun finishInterview(request: FinishInterviewRequest): FinishInterviewResponse {
+        val interviewHistory = withContext(Dispatchers.IO) {
+            interviewHistoryRepository.findById(request.interviewId)
+        }.filter {
+            it.comment == null
+        }.orElseThrow {
+            throw Exception("invalid interviewId.")
+        }
+
+        val res = llmClient.finishInterview(
+            body = LlmClient.FinishInterview.Body(
+                interviewId = request.interviewId
+            )
+        )
+
+        if (res.data == null || res.error != null) {
+            when (res.error) {
+                LlmClient.FinishInterview.Exception.INTERVIEW_LOCKED -> return FinishInterviewResponse(status = "처리중")
+                else -> throw Exception("invalid interviewId.")
+            }
+        }
+
+        interviewHistory.endTime = LocalDateTime.now()
+        interviewHistory.script = res.data.interviewHistory.joinToString("__")
+        interviewHistory.comment = res.data.interviewPaper.finalOneLineReview
+        interviewHistory.score = res.data.interviewPaper.finalScore
+        interviewHistory.questions = res.data.interviewPaper.items.map {
+            Question(
+                id = 0,
+                question = it.question,
+                answer = it.answer,
+                score = it.evaluation.score,
+                feedback = it.evaluation.comment,
+                interviewHistory = interviewHistory,
+            ).apply {
+                tailQuestions = it.tailQuestions.map { each ->
+                    Question(
+                        id = 0,
+                        question = each.question,
+                        answer = each.answer,
+                        score = each.evaluation.score,
+                        feedback = each.evaluation.comment,
+                        interviewHistory = interviewHistory,
+                        parent = this,
+                    )
+                }.toMutableList()
+            }
+        }.toMutableList()
+
+        withContext(Dispatchers.IO) {
+            interviewHistoryRepository.save(interviewHistory)
+        }
+
+        return FinishInterviewResponse(status = "완료")
     }
 }
