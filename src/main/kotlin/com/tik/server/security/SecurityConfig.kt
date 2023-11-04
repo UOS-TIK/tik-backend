@@ -26,15 +26,15 @@ class SecurityConfig(private val jwtTokenProvider: JwtTokenProvider) {
     // jwt를 사용하기 때문에 session 사용안함 처리
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
     // 권한 관리
-            .authorizeHttpRequests {
-    // 해당 url로 접근하는 사용자는 인증되지 않은 사용자 여아함
-                it.requestMatchers(MvcRequestMatcher(introspector, "/user/signUp")).anonymous()
-                    .requestMatchers(MvcRequestMatcher(introspector, "/user/signIn")).anonymous()
-    // 그외 /resume로 시작하는 모든 요청은 MEMBER 권한이 있어야 접근 가능
-                    .requestMatchers(MvcRequestMatcher(introspector, "/resume/**")).hasRole("MEMBER")
-    // 그외 요청은 권한 없이 모두 접근 가능
-                    .anyRequest().permitAll()
-            }
+//            .authorizeHttpRequests {
+//    // 해당 url로 접근하는 사용자는 인증되지 않은 사용자 여아함
+//                it.requestMatchers(MvcRequestMatcher(introspector, "/user/signUp")).anonymous()
+//                    .requestMatchers(MvcRequestMatcher(introspector, "/user/signIn")).anonymous()
+//    // 그외 /resume로 시작하는 모든 요청은 MEMBER 권한이 있어야 접근 가능
+//                    .requestMatchers(MvcRequestMatcher(introspector, "/resume/**")).hasRole("MEMBER")
+//    // 그외 요청은 권한 없이 모두 접근 가능
+//                    .anyRequest().permitAll()
+//            }
 
     // JWTAuthenticationFilter가 UsernamePasswordAuthenticationFilter보다 먼저 실행
     // 앞의 필터가 성공하면 뒤 필터는 시행 x

@@ -2,6 +2,7 @@ package com.tik.server.service
 
 import com.tik.server.dto.ResumeCreateRequest
 import com.tik.server.dto.ResumeDetail
+import com.tik.server.dto.TechStackDTO
 import com.tik.server.entity.Project
 import com.tik.server.entity.ProjectTechStack
 import com.tik.server.entity.Resume
@@ -27,7 +28,7 @@ class ResumeService(
     @Transactional
     fun saveResume(request: ResumeCreateRequest) {
         val member = memberRepository.findById(request.memberId.toInt()) ?: throw IllegalStateException("유저가 존재하지 않습니다.")
-        val resume = resumeRepository.save(Resume(member = member, name = request.name, introduction = request.introduction))
+        val resume = resumeRepository.save(Resume(member = member, name = request.name, introduction = request.introduction, enabled = true))
         request.projects.forEach {
             val project = projectRepository.save(Project(name = it.name, summary = it.summary, description = it.description, resume = resume))
             val projectTechStackList: MutableList<ProjectTechStack> = ArrayList()
@@ -40,11 +41,26 @@ class ResumeService(
     }
 
     fun findAllResume(memberId: Int): List<ResumeDetail> {
-        return resumeRepository.findAllByMemberId(memberId).map {
+        return resumeRepository.findAllByMemberIdAndEnabled(memberId, true).map {
             ResumeDetail.from(it)
         }
     }
 
+    fun findAllTechStack(): List<TechStackDTO> {
+        return techStackRepository.findAll().map {
+            TechStackDTO.from(it)
+        }
+    }
+
+    @Transactional
+    fun disableResume(resumeId: Int) {
+        var resume: Resume = resumeRepository.findById(resumeId).orElse(null)
+            ?: throw IllegalStateException("이력서가 존재하지 않습니다.")
+        resume.softDeleteResume()
+        resumeRepository.save(resume)
+    }
+
+    @Transactional
     fun deleteResume(resumeId: Int) {
         return resumeRepository.deleteById(resumeId)
     }
