@@ -1,10 +1,7 @@
 package com.tik.server.controller
 
 import com.tik.server.common.BaseResponse
-import com.tik.server.dto.InterviewAnswerRequest
-import com.tik.server.dto.InterviewCreateRequest
-import com.tik.server.dto.InterviewCreateResponse
-import com.tik.server.dto.InterviewQuestion
+import com.tik.server.dto.*
 import com.tik.server.service.InterviewService
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
@@ -27,6 +24,13 @@ class InterviewController(
     @ResponseStatus(HttpStatus.CREATED)
     suspend fun speakToInterviewer(@RequestBody request: InterviewAnswerRequest): BaseResponse<InterviewQuestion> {
         val response = interviewService.speakToInterviewer(request)
+        return BaseResponse(data = response)
+    }
+
+    @PostMapping("/finish")
+    @ResponseStatus(HttpStatus.CREATED)
+    suspend fun finishInterview(@RequestBody request: FinishInterviewRequest): BaseResponse<FinishInterviewResponse> {
+        val response = interviewService.finishInterview(request)
         return BaseResponse(data = response)
     }
 }

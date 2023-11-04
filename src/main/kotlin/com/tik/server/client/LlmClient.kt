@@ -26,7 +26,7 @@ class LlmClient(
         .codecs { it.defaultCodecs().maxInMemorySize(2 * 1024 * 1024) }
         .clientConnector(
             ReactorClientHttpConnector(
-                HttpClient.create().responseTimeout(Duration.ofSeconds(30))
+                HttpClient.create().responseTimeout(Duration.ofSeconds(180))
             )
         )
         .build()
@@ -67,7 +67,7 @@ class LlmClient(
 
                 fun <T : Exception> getByMessage(enumClass: Class<T>, message: String): T {
                     val enumMap = enumClass.enumConstants.associateBy { it.message }
-                    if(enumMap[message] != null){
+                    if (enumMap[message] != null) {
                         return enumMap[message] as T
                     }
 
