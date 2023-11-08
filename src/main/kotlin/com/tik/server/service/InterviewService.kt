@@ -6,6 +6,7 @@ import com.tik.server.entity.InterviewHistory
 import com.tik.server.entity.Question
 import com.tik.server.repository.InterviewHistoryRepository
 import com.tik.server.repository.ResumeRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
