@@ -2,17 +2,14 @@ package com.tik.server.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.tik.server.entity.Member
-import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 
 data class MemberRequestDto(
-    var id: Int?,
 
     @field:NotBlank
-    @field:Email
-    @JsonProperty("email")
-    private val _email: String?,
+    @JsonProperty("uid")
+    private val _uid: String?,
 
     @field:NotBlank
     @field:Pattern(
@@ -27,28 +24,28 @@ data class MemberRequestDto(
     private val _username: String?,
 
 ) {
-    val email: String
-        get() = _email!!
+    val uid: String
+        get() = _uid!!
     val password: String
         get() = _password!!
     val username: String
         get() = _username!!
 
     fun toEntity(): Member =
-        Member(id, email, password, username)
+        Member(null, uid, password, username)
 }
 
 data class SignInDto(
     @field:NotBlank
-    @JsonProperty("email")
-    private val _email: String?,
+    @JsonProperty("uid")
+    private val _uid: String?,
 
     @field:NotBlank
     @JsonProperty("password")
     private val _password: String?
 ) {
-    val email: String
-        get() = _email!!
+    val uid: String
+        get() = _uid!!
     val password: String
         get() = _password!!
 

@@ -18,9 +18,9 @@ import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import java.util.Date
 
-const val EXPIRATION_MILLISECONDS: Long = 1000 * 60 * 60
+const val EXPIRATION_MILLISECONDS: Long = 1000 * 60 * 10080 // 7일
 
-// 토큰을 생성하고 토큰 정보를 추출
+// 토큰을 생성하고 검증하고 토큰 정보를 추출
 @Component
 class JwtTokenProvider {
     @Value("\${jwt.secret}")
@@ -40,7 +40,7 @@ class JwtTokenProvider {
 
         val now = Date()
         val accessExpiration = Date(now.time + EXPIRATION_MILLISECONDS)
-        val refreshExpiration = Date(now.time + EXPIRATION_MILLISECONDS)
+
 // Access Token
         val accessToken = Jwts
             .builder()
@@ -52,15 +52,8 @@ class JwtTokenProvider {
             .signWith(key, SignatureAlgorithm.HS256) // 키 사용 알고리즘
             .compact()
 
-// Refresh Token
-        val refreshToken = Jwts
-            .builder()
-            .setExpiration(refreshExpiration)
-            .signWith(key, SignatureAlgorithm.HS256)
-            .compact()
-
 // Bearer 에 위에서 생성한 accessToken 을 담아서 TokenInfo 로 반환
-        return TokenInfo("Bearer", accessToken, refreshToken)
+        return TokenInfo("Bearer", accessToken)
     }
 
     /**

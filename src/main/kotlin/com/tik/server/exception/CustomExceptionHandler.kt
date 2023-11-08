@@ -15,20 +15,20 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 @RestControllerAdvice
 class CustomExceptionHandler {
 
-    @ExceptionHandler(MethodArgumentNotValidException::class)
+    @ExceptionHandler(MethodArgumentNotValidException::class) // Member dto에 적용한 validation exception 발생할 시
     protected fun methodArgumentNotValidException(ex: MethodArgumentNotValidException): ResponseEntity<BaseResponse<Map<String, String>>> {
         val errors = mutableMapOf<String, String>()
-        ex.bindingResult.allErrors.forEach { error ->
-            val fieldName = (error as FieldError).field
-            val errorMessage = error.defaultMessage
-            errors[fieldName] = errorMessage ?: "Not Exception Message"
+        ex.bindingResult.allErrors.forEach { error -> // exception에 들어있는 에러들을 전부 가져온 후
+            val fieldName = (error as FieldError).field // 해당 에러의 필드 네임과
+            val errorMessage = error.defaultMessage     // 에러 메세지들을
+            errors[fieldName] = errorMessage ?: "Not Exception Message"    // errors mutablemap에 저장
         }
 
         return ResponseEntity(BaseResponse(ResultCode.ERROR.name ,errors, ResultCode.ERROR.msg), HttpStatus.BAD_REQUEST)
-
+                // errors를 baseresponse의 데이터 위치에 집어넣고 반환
     }
 
-    @ExceptionHandler(InvalidInputException::class)
+    @ExceptionHandler(InvalidInputException::class) // InvalidInputException class의 예외처리
     protected fun invalidInputException(ex: InvalidInputException): ResponseEntity<BaseResponse<Map<String, String>>> {
         val errors = mapOf(ex.fieldName to (ex.message ?: "Not Exception Message"))
         return ResponseEntity(BaseResponse(ResultCode.ERROR.name ,errors, ResultCode.ERROR.msg), HttpStatus.BAD_REQUEST)

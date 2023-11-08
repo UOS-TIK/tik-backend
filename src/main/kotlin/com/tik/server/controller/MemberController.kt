@@ -28,4 +28,8 @@ class MemberController(private val memberService: MemberService) {
         return BaseResponse(data = tokenInfo)
     }
 
+    // token정보는 securityContextHolder에 적혀있음, token에 user정보(userId)존재
+    //토큰에서 Id값을 가져와 사용
+    // val userId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
+
 }

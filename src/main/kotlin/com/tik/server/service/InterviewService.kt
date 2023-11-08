@@ -7,7 +7,6 @@ import com.tik.server.entity.Question
 import com.tik.server.repository.InterviewHistoryRepository
 import com.tik.server.repository.ResumeRepository
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -89,13 +88,19 @@ class InterviewService(
         return FinishInterviewResponse(status = "중단")
     }
 
+    @Transactional
     suspend fun finishInterview(request: FinishInterviewRequest): FinishInterviewResponse {
-        val interviewHistory = withContext(Dispatchers.IO) {
+        val interviewHistory = withContext(IO) {
             interviewHistoryRepository.findById(request.interviewId)
         }.filter {
             it.comment == null
         }.orElseThrow {
             throw Exception("invalid interviewId.")
+        }
+
+        if (interviewHistory.endTime == null) {
+            interviewHistory.endTime = LocalDateTime.now()
+            withContext(IO) { interviewHistoryRepository.save(interviewHistory) }
         }
 
         val res = llmClient.finishInterview(
@@ -111,7 +116,6 @@ class InterviewService(
             }
         }
 
-        interviewHistory.endTime = LocalDateTime.now()
         interviewHistory.script = res.data.interviewHistory.joinToString("__")
         interviewHistory.comment = res.data.interviewPaper.finalOneLineReview
         interviewHistory.score = res.data.interviewPaper.finalScore
@@ -138,9 +142,7 @@ class InterviewService(
             }
         }.toMutableList()
 
-        withContext(Dispatchers.IO) {
-            interviewHistoryRepository.save(interviewHistory)
-        }
+        withContext(IO) { interviewHistoryRepository.save(interviewHistory) }
 
         return FinishInterviewResponse(status = "완료")
     }
