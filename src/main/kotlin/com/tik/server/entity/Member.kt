@@ -10,8 +10,8 @@ class Member(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int? = null,
 
-    @Column(name = "email", nullable = false, unique = true)
-    var email: String,
+    @Column(name = "uid", nullable = false, unique = true)
+    var uid: String,
 
     @Column(name = "password", nullable = false)
     var password: String,

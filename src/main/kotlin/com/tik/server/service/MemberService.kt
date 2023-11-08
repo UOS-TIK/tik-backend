@@ -25,9 +25,9 @@ class MemberService(
     private val jwtTokenProvider: JwtTokenProvider,
 ) {
     fun signUp(memberRequestDto: MemberRequestDto): String {
-        var member: Member? = memberRepository.findByEmail(memberRequestDto.email)
+        var member: Member? = memberRepository.findByUid(memberRequestDto.uid)
         if(member != null) {
-            throw InvalidInputException("email", "이미 등록된 email입니다")
+            throw InvalidInputException("uid", "이미 등록된 userId입니다")
         }
 
         member = memberRequestDto.toEntity()
@@ -46,7 +46,7 @@ class MemberService(
 
 
 
-        val authenticationToken = UsernamePasswordAuthenticationToken(signInDto.email, signInDto.password)
+        val authenticationToken = UsernamePasswordAuthenticationToken(signInDto.uid, signInDto.password)
         // 이메일과 패스워드를 사용하여 usernamepasswordauthenticationtoken을 발행
         val authentication = authenticationManagerBuilder.`object`.authenticate(authenticationToken)
         // managerbuilder에 토큰을 전달, authenticate가 실행되면서 CustomUserDetailsService의 loadUserByUsername가 호출되면서
