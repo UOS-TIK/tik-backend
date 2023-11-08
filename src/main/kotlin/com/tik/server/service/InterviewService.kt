@@ -55,6 +55,7 @@ class InterviewService(
                 interviewId = response.data.interviewId
             )
         } else {
+            // todo: 시나리오 별 에러 처리
             throw IllegalStateException(response.error?.message)
         }
     }
@@ -68,12 +69,23 @@ class InterviewService(
         )
         return if (response.data != null) {
             InterviewQuestion(
-                reply = response.data.reply
+                reply = response.data.reply,
+                isFinished = response.data.isFinished
             )
         } else {
-            // todo: error=interview finished 상태일 때 처리
             throw IllegalStateException(response.error?.message)
         }
+    }
+
+    @Transactional
+    fun abortInterview(interviewId: Int): FinishInterviewResponse {
+        interviewHistoryRepository.findById(interviewId)
+            .map {
+                if (it.endTime != null)
+                    throw IllegalStateException("이미 종료된 면접입니다.")
+                interviewHistoryRepository.delete(it) }
+            .orElseThrow { throw IllegalStateException("유효한 면접이 아닙니다.") }
+        return FinishInterviewResponse(status = "중단")
     }
 
     @Transactional

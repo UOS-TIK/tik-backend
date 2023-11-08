@@ -125,7 +125,8 @@ class LlmClient(
         )
 
         data class Response(
-            val reply: String
+            val reply: String,
+            val isFinished: Boolean
         ) : Base.Response
 
         enum class Exception(override val message: String) : Base.Exception {
