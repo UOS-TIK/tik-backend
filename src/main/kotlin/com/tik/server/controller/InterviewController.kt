@@ -33,4 +33,11 @@ class InterviewController(
         val response = interviewService.finishInterview(request)
         return BaseResponse(data = response)
     }
+
+    @DeleteMapping("/abort/{interviewId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun abortInterview(@PathVariable interviewId: Int): BaseResponse<FinishInterviewResponse> {
+        val response = interviewService.abortInterview(interviewId)
+        return BaseResponse(data = response)
+    }
 }
