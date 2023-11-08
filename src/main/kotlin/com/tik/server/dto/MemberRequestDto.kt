@@ -2,7 +2,6 @@ package com.tik.server.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.tik.server.entity.Member
-import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 
