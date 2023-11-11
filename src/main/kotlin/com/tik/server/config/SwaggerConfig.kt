@@ -10,11 +10,11 @@ import io.swagger.v3.oas.models.security.SecurityRequirement
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
-private const val AUTH_TOKEN_HEADER = "X-AUTH-TOKEN"
+private const val AUTH_TOKEN_HEADER = "bearerAuth"
 
 @SecurityScheme(
-    type = SecuritySchemeType.APIKEY, `in` = SecuritySchemeIn.HEADER,
-    name = AUTH_TOKEN_HEADER, description = "Auth Token",
+    type = SecuritySchemeType.HTTP, `in` = SecuritySchemeIn.HEADER,
+    name = AUTH_TOKEN_HEADER, description = "Auth Token", bearerFormat = "JWT", scheme = "bearer"
 )
 @Configuration
 class SwaggerConfig {
