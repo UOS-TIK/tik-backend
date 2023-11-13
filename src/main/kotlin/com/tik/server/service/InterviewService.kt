@@ -46,7 +46,9 @@ class InterviewService(
                 techStack = arrayListOf(techStack),
                 jobDescription = arrayListOf(request.jobDescription),
                 options = LlmClient.InitInterview.Options(
-                    questionCount = request.options.questionCount
+                    resumeQuestion = request.options.questionCount, // TODO: 갯수 수정
+                    jdQuestion = request.options.questionCount,
+                    csQuestion = request.options.questionCount,
                 )
             )
         )
@@ -83,7 +85,8 @@ class InterviewService(
             .map {
                 if (it.endTime != null)
                     throw IllegalStateException("이미 종료된 면접입니다.")
-                interviewHistoryRepository.delete(it) }
+                interviewHistoryRepository.delete(it)
+            }
             .orElseThrow { throw IllegalStateException("유효한 면접이 아닙니다.") }
         return FinishInterviewResponse(status = "중단")
     }
