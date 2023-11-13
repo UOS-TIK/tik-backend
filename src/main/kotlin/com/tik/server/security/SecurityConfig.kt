@@ -1,18 +1,19 @@
 package com.tik.server.security
 
-import com.tik.server.service.CustomUserDetailService
+import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
-import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+import org.springframework.web.filter.CorsFilter
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector
 
 
@@ -22,6 +23,34 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector
 class SecurityConfig(
     private val jwtTokenProvider: JwtTokenProvider)
 {
+
+    @Bean
+    fun corsFilterRegistrationBean(): FilterRegistrationBean<CorsFilter> {
+        // CORS 설정을 위한 객체 생성
+        val config = CorsConfiguration()
+
+        // CORS 설정 값 지정
+        config.allowCredentials = false
+        config.addAllowedOrigin("*")
+        config.addAllowedHeader("*")
+        config.addAllowedMethod("*")
+        config.maxAge = 6000L
+
+        // CORS 설정을 등록할 소스 생성
+        val source = UrlBasedCorsConfigurationSource()
+
+        // 소스에 CORS 설정 등록
+        source.registerCorsConfiguration("/**", config)
+
+        // CORS 필터를 가지는 FilterRegistrationBean 객체 생성
+        val filterBean: FilterRegistrationBean<CorsFilter> = FilterRegistrationBean<CorsFilter>(CorsFilter(source))
+
+        // 필터의 순서 설정
+        filterBean.setOrder(0)
+
+        // FilterRegistrationBean 객체 반환
+        return filterBean
+    }
 
     // 필터 설정
     @Bean
@@ -45,7 +74,6 @@ class SecurityConfig(
                     // 그외 요청은 권한 없이 모두 접근 가능
                     .anyRequest().permitAll()
             }
-
     // JWTAuthenticationFilter가 UsernamePasswordAuthenticationFilter보다 먼저 실행
     // 앞의 필터가 성공하면 뒤 필터는 시행 x
             .addFilterBefore(

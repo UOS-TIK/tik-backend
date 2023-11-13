@@ -29,8 +29,8 @@ class CustomExceptionHandler {
     }
 
     @ExceptionHandler(InvalidInputException::class) // InvalidInputException class의 예외처리
-    protected fun invalidInputException(ex: InvalidInputException): ResponseEntity<BaseResponse<Map<String, String>>> {
-        val errors = mapOf(ex.fieldName to (ex.message ?: "Not Exception Message"))
+    protected fun invalidInputException(ex: InvalidInputException): ResponseEntity<BaseResponse<String>> {
+        val errors = (ex.message ?: "Not Exception Message")
         return ResponseEntity(BaseResponse(ResultCode.ERROR.name ,errors, ResultCode.ERROR.msg), HttpStatus.BAD_REQUEST)
     }
 

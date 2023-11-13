@@ -27,7 +27,7 @@ class MemberService(
     fun signUp(memberRequestDto: MemberRequestDto): String {
         var member: Member? = memberRepository.findByUid(memberRequestDto.uid)
         if(member != null) {
-            throw InvalidInputException("uid", "이미 등록된 userId입니다")
+            throw InvalidInputException("uid", "이미 존재하는 아이디입니다.")
         }
 
         member = memberRequestDto.toEntity()

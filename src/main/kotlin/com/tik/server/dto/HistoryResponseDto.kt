@@ -1,6 +1,8 @@
 package com.tik.server.dto
 
 import com.tik.server.entity.InterviewHistory
+import com.tik.server.entity.Question
+import com.tik.server.entity.QuestionView
 import com.tik.server.entity.Resume
 import java.time.LocalDateTime
 
@@ -19,7 +21,8 @@ data class HistoryResponseList (
         }
     }
 }
-    data class HistoryResponseView(
+/*
+    data class HistoryResponse(
         val interviewHistoryId: Int,
         val resume: String,
         val jobDescription: String,
@@ -30,8 +33,8 @@ data class HistoryResponseList (
         val endTime: LocalDateTime?
     ) {
         companion object {
-            fun from(interviewHistory: InterviewHistory): HistoryResponseView {
-                return HistoryResponseView(
+            fun from(interviewHistory: InterviewHistory): HistoryResponse {
+                return HistoryResponse(
                     interviewHistoryId = interviewHistory.id,
                     resume = interviewHistory.resume.name,
                     jobDescription = interviewHistory.jobDescription,
@@ -39,8 +42,20 @@ data class HistoryResponseList (
                     script = interviewHistory.script,
                     comment = interviewHistory.comment,
                     beginTime = interviewHistory.beginTime,
-                    endTime = interviewHistory.endTime
+                    endTime = interviewHistory.endTime,
                 )
             }
         }
     }
+*/
+    data class HistoryResponseView(
+        val interviewHistoryId: Int,
+        val resume: String,
+        val jobDescription: String,
+        val company: String,
+        val script: String?,
+        val comment: String?,
+        val beginTime: LocalDateTime?,
+        val endTime: LocalDateTime?,
+        val question : List<List<QuestionView>>
+    )

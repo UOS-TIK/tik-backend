@@ -36,3 +36,11 @@ class Question(
     @JoinColumn(name = "interview_history_id", nullable = false)
     var interviewHistory: InterviewHistory
 )
+
+interface QuestionView {
+    fun getId(): Int
+    fun getQuestion(): String?
+    fun getAnswer(): String?
+    fun getScore(): Int?
+    fun getFeedback(): String?
+}
