@@ -95,7 +95,11 @@ class LlmClient(
             val options: Options,
         )
 
-        data class Options(val questionCount: Int)
+        data class Options(
+            val resumeQuestion: Int,
+            val jdQuestion: Int,
+            val csQuestion: Int,
+        )
 
         data class Response(
             val interviewId: Int
