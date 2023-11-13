@@ -1,9 +1,7 @@
 package com.tik.server.dto
 
 import com.tik.server.entity.InterviewHistory
-import com.tik.server.entity.Question
 import com.tik.server.entity.QuestionView
-import com.tik.server.entity.Resume
 import java.time.LocalDateTime
 
 data class HistoryResponseList (
