@@ -1,5 +1,6 @@
 package com.tik.server.security
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -10,6 +11,9 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+import org.springframework.web.filter.CorsFilter
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector
 
 
@@ -19,7 +23,7 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector
 class SecurityConfig(
     private val jwtTokenProvider: JwtTokenProvider)
 {
-    /*
+/*
     @Bean
     fun corsFilterRegistrationBean(): FilterRegistrationBean<CorsFilter> {
         // CORS 설정을 위한 객체 생성
@@ -47,9 +51,9 @@ class SecurityConfig(
         // FilterRegistrationBean 객체 반환
         return filterBean
     }
-    */
-     */
+**/
 
+ */
     // 필터 설정
     @Bean
     fun filterChain(http: HttpSecurity, introspector: HandlerMappingIntrospector): SecurityFilterChain {

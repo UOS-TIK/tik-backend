@@ -1,6 +1,5 @@
 package com.tik.server.security
 
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
@@ -13,7 +12,7 @@ class CorsConfig : WebMvcConfigurer {
             .allowedOriginPatterns("http://localhost:3000")
             .allowedMethods("*")
             .allowedHeaders("*")
-            .allowCredentials(true)
+            .allowCredentials(false)
             .maxAge(3600)
     }
 }
