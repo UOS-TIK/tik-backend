@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 
 @RestController
+@CrossOrigin
 @RequestMapping("/interview")
 @Tag(name = "Interview", description = "면접 진행 관련 API입니다.")
 class InterviewController(

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/resume")
+@CrossOrigin
 @Tag(name = "Resume", description = "이력서 관련 API입니다.")
 class ResumeController(
     private val resumeService: ResumeService

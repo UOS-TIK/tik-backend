@@ -6,16 +6,12 @@ import com.tik.server.dto.HistoryResponseList
 import com.tik.server.dto.HistoryResponseView
 import com.tik.server.service.HistoryService
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 
 @RestController
 @RequestMapping("/history")
+@CrossOrigin
 class HistoryController (
     private val historyService: HistoryService
 ){
