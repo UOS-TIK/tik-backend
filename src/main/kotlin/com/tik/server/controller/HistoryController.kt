@@ -11,10 +11,9 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/history")
-@CrossOrigin
-class HistoryController (
+class HistoryController(
     private val historyService: HistoryService
-){
+) {
 
     @GetMapping("/list")
     fun searchHistoryList(): BaseResponse<List<HistoryResponseList>> {

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*
 
 @RequestMapping("/user")
 @RestController
-@CrossOrigin
 class MemberController(private val memberService: MemberService) {
 
     @PostMapping("/signUp")
@@ -21,7 +20,7 @@ class MemberController(private val memberService: MemberService) {
     }
 
     @PostMapping("/signIn")
-    fun signIn(@RequestBody @Valid signInDto: SignInDto) : BaseResponse<TokenInfo> {
+    fun signIn(@RequestBody @Valid signInDto: SignInDto): BaseResponse<TokenInfo> {
         val tokenInfo = memberService.signIn(signInDto)
         return BaseResponse(data = tokenInfo)
     }

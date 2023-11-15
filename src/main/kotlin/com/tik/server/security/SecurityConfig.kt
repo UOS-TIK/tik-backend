@@ -77,12 +77,11 @@ class SecurityConfig(
                     .anyRequest().permitAll()
             }
             // JWTAuthenticationFilter가 UsernamePasswordAuthenticationFilter보다 먼저 실행
-            // 앞의 필터가 성공하면 뒤 필터는 시행 x
             .addFilterBefore(
                 JwtAuthenticationFilter(jwtTokenProvider),
                 UsernamePasswordAuthenticationFilter::class.java
             )
-            .addFilterBefore(
+            .addFilterAfter(
                 CorsRequestFilter(),
                 UsernamePasswordAuthenticationFilter::class.java
             )
