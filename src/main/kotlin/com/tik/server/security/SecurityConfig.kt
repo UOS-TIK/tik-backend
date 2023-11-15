@@ -1,6 +1,5 @@
 package com.tik.server.security
 
-import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -11,9 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher
-import org.springframework.web.cors.CorsConfiguration
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource
-import org.springframework.web.filter.CorsFilter
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector
 
 
@@ -23,15 +19,15 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector
 class SecurityConfig(
     private val jwtTokenProvider: JwtTokenProvider)
 {
-
+    /*
     @Bean
     fun corsFilterRegistrationBean(): FilterRegistrationBean<CorsFilter> {
         // CORS 설정을 위한 객체 생성
         val config = CorsConfiguration()
 
         // CORS 설정 값 지정
-        config.allowCredentials = false
-        config.addAllowedOrigin("*")
+        config.allowCredentials = true
+        config.addAllowedOrigin("http://localhost:3000")
         config.addAllowedHeader("*")
         config.addAllowedMethod("*")
         config.maxAge = 6000L
@@ -51,6 +47,8 @@ class SecurityConfig(
         // FilterRegistrationBean 객체 반환
         return filterBean
     }
+    */
+     */
 
     // 필터 설정
     @Bean
