@@ -1,11 +1,15 @@
 package com.tik.server.controller
 
+import com.tik.server.common.BaseResponse
+import com.tik.server.dto.CustomUser
 import com.tik.server.dto.ResumeCreateRequest
-import com.tik.server.dto.ResumeDetail
+import com.tik.server.dto.ResumeDetailResult
+import com.tik.server.dto.ResumeResult
 import com.tik.server.service.ResumeService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -20,18 +24,31 @@ class ResumeController(
         summary = "이력서 저장",
         description = "이력서 저장하는 API입니다."
     )
-    fun saveResume(@RequestBody request: ResumeCreateRequest) {
-        resumeService.saveResume(request)
+    fun saveResume(@AuthenticationPrincipal user: CustomUser, @RequestBody request: ResumeCreateRequest): BaseResponse<List<ResumeResult>> {
+        val response = resumeService.saveResume(request, user.userId)
+        return BaseResponse(data = response)
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @Operation(
-        summary = "회원 이력서 조회",
+        summary = "회원 이력서 전체 조회",
         description = "활성화 된 이력서 전체를 조회하는 API입니다."
     )
-    fun findAllResume(@RequestParam(name = "memberId") memberId: Int): List<ResumeDetail> {
-        return resumeService.findAllResume(memberId)
+    fun findAllResume(@AuthenticationPrincipal user: CustomUser): BaseResponse<List<ResumeResult>> {
+        val response = resumeService.findAllResume(user.userId)
+        return BaseResponse(data = response)
+    }
+
+    @GetMapping("/detail")
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(
+        summary = "이력서 상세 조회",
+        description = "해당 id의 이력서를 상세 조회하는 API입니다."
+    )
+    fun findResume(@RequestParam(name = "resumeId") resumeId: Int): BaseResponse<ResumeDetailResult> {
+        val response = resumeService.findResume(resumeId)
+        return BaseResponse(data = response)
     }
 
     @PatchMapping("/disable/{resumeId}")

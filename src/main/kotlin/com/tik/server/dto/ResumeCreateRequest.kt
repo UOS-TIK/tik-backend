@@ -1,9 +1,6 @@
 package com.tik.server.dto
 
 class ResumeCreateRequest {
-    lateinit var memberId: Integer
-        private set
-
     lateinit var name: String
         private set
 

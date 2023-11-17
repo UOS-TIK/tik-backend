@@ -1,7 +1,8 @@
 package com.tik.server.service
 
 import com.tik.server.dto.ResumeCreateRequest
-import com.tik.server.dto.ResumeDetail
+import com.tik.server.dto.ResumeDetailResult
+import com.tik.server.dto.ResumeResult
 import com.tik.server.dto.TechStackDTO
 import com.tik.server.entity.Project
 import com.tik.server.entity.ProjectTechStack
@@ -26,8 +27,8 @@ class ResumeService(
     }
 
     @Transactional
-    fun saveResume(request: ResumeCreateRequest) {
-        val member = memberRepository.findById(request.memberId.toInt()) ?: throw IllegalStateException("유저가 존재하지 않습니다.")
+    fun saveResume(request: ResumeCreateRequest, memberId: Int): List<ResumeResult> {
+        val member = memberRepository.findById(memberId) ?: throw IllegalStateException("유저가 존재하지 않습니다.")
         val resume = resumeRepository.save(Resume(member = member, name = request.name, introduction = request.introduction, enabled = true))
         request.projects.forEach {
             val project = projectRepository.save(Project(name = it.name, summary = it.summary, description = it.description, resume = resume))
@@ -38,16 +39,31 @@ class ResumeService(
             }
             projectTechStackRepository.saveAll(projectTechStackList)
         }
+        return resumeRepository.findAllByMemberIdAndEnabled(memberId, true).map {
+            ResumeResult.from(it)
+        }
     }
 
-    fun findAllResume(memberId: Int): List<ResumeDetail> {
+    fun findAllResume(memberId: Int): List<ResumeResult> {
         return resumeRepository.findAllByMemberIdAndEnabled(memberId, true).map {
-            ResumeDetail.from(it)
+            ResumeResult.from(it)
         }
+    }
+
+    fun findResume(resumeId: Int): ResumeDetailResult {
+        val resume = resumeRepository.findById(resumeId).orElse(null)
+            ?: throw IllegalStateException("이력서가 존재하지 않습니다.")
+        return ResumeDetailResult.from(resume)
     }
 
     fun findAllTechStack(): List<TechStackDTO> {
         return techStackRepository.findAll().map {
+            TechStackDTO.from(it)
+        }
+    }
+
+    fun findTechStacks(text: String): List<TechStackDTO> {
+        return techStackRepository.findByNameContaining(text).map {
             TechStackDTO.from(it)
         }
     }
