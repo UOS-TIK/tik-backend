@@ -4,15 +4,15 @@ import com.tik.server.entity.Project
 import com.tik.server.entity.Resume
 import com.tik.server.entity.TechStack
 
-data class ResumeDetail(
-    val id: Int?, // todo: memberId 추가
+data class ResumeDetailResult(
+    val id: Int?,
     val name: String,
     val introduction: String,
     val projects: List<ProjectDetail>
 ) {
     companion object {
-        fun from(resume: Resume): ResumeDetail {
-            return ResumeDetail(
+        fun from(resume: Resume): ResumeDetailResult {
+            return ResumeDetailResult(
                 id = resume.id,
                 name = resume.name,
                 introduction = resume.introduction,
