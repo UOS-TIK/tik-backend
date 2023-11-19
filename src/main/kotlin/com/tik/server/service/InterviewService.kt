@@ -35,7 +35,10 @@ class InterviewService(
                 InterviewHistory(
                     resume = resume,
                     jobDescription = request.jobDescription,
-                    company = request.company
+                    company = request.company,
+                    resumeQuestion = request.options.resumeQuestion,
+                    jdQuestion = request.options.jdQuestion,
+                    csQuestion = request.options.csQuestion
                 )
             )
         }
@@ -46,9 +49,9 @@ class InterviewService(
                 techStack = arrayListOf(techStack),
                 jobDescription = arrayListOf(request.jobDescription),
                 options = LlmClient.InitInterview.Options(
-                    resumeQuestion = request.options.questionCount, // TODO: 갯수 수정
-                    jdQuestion = request.options.questionCount,
-                    csQuestion = request.options.questionCount,
+                    resumeQuestion = request.options.resumeQuestion,
+                    jdQuestion = request.options.jdQuestion,
+                    csQuestion = request.options.csQuestion
                 )
             )
         )
