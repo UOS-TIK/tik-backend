@@ -21,11 +21,16 @@ class Resume(
     @Column(name = "id", nullable = false)
     val id: Int? = null
 
-    @OneToMany(mappedBy = "resume", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "resume", fetch = FetchType.EAGER, cascade = [CascadeType.ALL], orphanRemoval = true)
     var project: MutableList<Project> = ArrayList()
         protected set
 
     fun softDeleteResume() {
         this.enabled = false
+    }
+
+    fun updateResume(name: String, introduction: String) {
+        this.name = name
+        this.introduction = introduction
     }
 }
