@@ -12,7 +12,13 @@ class InterviewHistory(
     @Column(name = "job_description")
     var jobDescription: String,
     @Column(name = "company")
-    var company: String
+    var company: String,
+    @Column(name = "resume_question")
+    var resumeQuestion: Int,
+    @Column(name = "jd_question")
+    var jdQuestion: Int,
+    @Column(name = "cs_question")
+    var csQuestion: Int
 ) : BaseTimeEntity() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
