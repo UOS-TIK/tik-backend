@@ -1,7 +1,6 @@
 package com.tik.server.dto
 
 import com.tik.server.entity.InterviewHistory
-import com.tik.server.entity.Question
 import com.tik.server.entity.QuestionView
 import java.time.LocalDateTime
 
