@@ -1,6 +1,7 @@
 package com.tik.server.dto
 
 import com.tik.server.entity.InterviewHistory
+import com.tik.server.entity.Question
 import com.tik.server.entity.QuestionView
 import java.time.LocalDateTime
 
@@ -48,8 +49,13 @@ data class HistoryResponseList (
 */
     data class HistoryResponseView(
         val interviewHistoryId: Int,
-        val resume: String,
+        val resume: Int?,
         val jobDescription: String,
+        val resumeQuestion: Int,
+        val jdQuestion: Int,
+        val csQuestion: Int,
+        val score: Int,
+        val interviewName: String,
         val company: String,
         val script: String?,
         val comment: String?,

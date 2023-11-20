@@ -7,6 +7,9 @@ class InterviewCreateRequest {
     lateinit var company: String
         private set
 
+    lateinit var interviewName: String
+        private set
+
     lateinit var occupation: String
         private set
 
