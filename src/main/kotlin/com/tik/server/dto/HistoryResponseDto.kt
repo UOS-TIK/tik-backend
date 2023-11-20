@@ -48,8 +48,13 @@ data class HistoryResponseList (
 */
     data class HistoryResponseView(
         val interviewHistoryId: Int,
-        val resume: String,
+        val resume: Int?,
         val jobDescription: String,
+        val resumeQuestion: Int,
+        val jdQuestion: Int,
+        val csQuestion: Int,
+        val score: Int,
+        val interviewName: String,
         val company: String,
         val script: String?,
         val comment: String?,

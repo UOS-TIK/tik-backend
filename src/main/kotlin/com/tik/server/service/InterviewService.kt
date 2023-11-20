@@ -35,6 +35,7 @@ class InterviewService(
                 InterviewHistory(
                     resume = resume,
                     jobDescription = request.jobDescription,
+                    interviewName = request.interviewName,
                     company = request.company,
                     resumeQuestion = request.options.resumeQuestion,
                     jdQuestion = request.options.jdQuestion,

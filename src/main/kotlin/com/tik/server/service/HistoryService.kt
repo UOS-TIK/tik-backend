@@ -32,9 +32,14 @@ class HistoryService (
 
         return HistoryResponseView(
             interviewHistoryId = interviewHistory.id,
-            resume = interviewHistory.resume.name,
+            resume = interviewHistory.resume.id,
             jobDescription = interviewHistory.jobDescription,
+            interviewName = interviewHistory.interviewName,
             company = interviewHistory.company,
+            resumeQuestion = interviewHistory.resumeQuestion,
+            jdQuestion = interviewHistory.jdQuestion,
+            csQuestion = interviewHistory.csQuestion,
+            score = interviewHistory.score!!,
             script = interviewHistory.script,
             comment = interviewHistory.comment,
             beginTime = interviewHistory.beginTime,

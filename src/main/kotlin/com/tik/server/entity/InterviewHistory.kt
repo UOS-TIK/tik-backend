@@ -11,6 +11,8 @@ class InterviewHistory(
     var resume: Resume,
     @Column(name = "job_description")
     var jobDescription: String,
+    @Column(name = "interview_name")
+    var interviewName: String,
     @Column(name = "company")
     var company: String,
     @Column(name = "resume_question")
