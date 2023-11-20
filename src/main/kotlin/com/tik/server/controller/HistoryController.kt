@@ -5,6 +5,7 @@ import com.tik.server.dto.CustomUser
 import com.tik.server.dto.HistoryResponseList
 import com.tik.server.dto.HistoryResponseView
 import com.tik.server.service.HistoryService
+import org.springframework.http.HttpStatus
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 
@@ -29,6 +30,7 @@ class HistoryController(
     }
 
     @DeleteMapping("/delete/{interviewHistoryId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteHistory(@PathVariable interviewHistoryId: Int) {
         historyService.deleteHistory(interviewHistoryId)
     }
