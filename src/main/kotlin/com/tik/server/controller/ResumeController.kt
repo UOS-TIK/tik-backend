@@ -34,7 +34,6 @@ class ResumeController(
     )
     fun modifyResume(@RequestBody request: ResumeModifyRequest): BaseResponse<ResumeDetailResult> {
         val response = resumeService.modifyResume(request)
-//        val response = resumeService.findResume(request.resumeId.toInt())
         return BaseResponse(data = response)
     }
 
