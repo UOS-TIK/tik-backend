@@ -21,12 +21,6 @@ class Project(
     @Column(name = "id", nullable = false)
     val id: Int? = null
 
-    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     var projectTechStack: MutableList<ProjectTechStack> = ArrayList()
-
-    fun updateProject(name: String, summary: String, description: String) {
-        this.name = name
-        this.summary = summary
-        this.description = description
-    }
 }

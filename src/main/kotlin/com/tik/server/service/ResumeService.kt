@@ -1,9 +1,6 @@
 package com.tik.server.service
 
-import com.tik.server.dto.ResumeCreateRequest
-import com.tik.server.dto.ResumeDetailResult
-import com.tik.server.dto.ResumeResult
-import com.tik.server.dto.TechStackDTO
+import com.tik.server.dto.*
 import com.tik.server.entity.Project
 import com.tik.server.entity.ProjectTechStack
 import com.tik.server.entity.Resume
@@ -42,6 +39,25 @@ class ResumeService(
         return resumeRepository.findAllByMemberIdAndEnabled(memberId, true).map {
             ResumeResult.from(it)
         }
+    }
+
+    @Transactional
+    fun modifyResume(request: ResumeModifyRequest): ResumeDetailResult {
+        val resume = resumeRepository.findByIdAndEnabled(request.resumeId.toInt(), true)
+        resume.updateResume(request.name, request.introduction)
+        val projectList = projectRepository.findAllByResumeId(request.resumeId.toInt()).map { it.id }
+        projectRepository.deleteAllByIds(projectList)
+        request.projects.forEach {
+            val project = projectRepository.save(Project(name = it.name, summary = it.summary, description = it.description, resume = resume))
+            val projectTechStackList: MutableList<ProjectTechStack> = ArrayList()
+            it.techStack.forEach{
+                val techStack = techStackRepository.findById(it).get()
+                projectTechStackList.add(ProjectTechStack(project = project, techStack = techStack))
+            }
+            projectTechStackRepository.saveAll(projectTechStackList)
+        }
+        resumeRepository.save(resume)
+        return ResumeDetailResult.from(resume)
     }
 
     fun findAllResume(memberId: Int): List<ResumeResult> {

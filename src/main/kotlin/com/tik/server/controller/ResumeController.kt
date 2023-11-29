@@ -1,10 +1,7 @@
 package com.tik.server.controller
 
 import com.tik.server.common.BaseResponse
-import com.tik.server.dto.CustomUser
-import com.tik.server.dto.ResumeCreateRequest
-import com.tik.server.dto.ResumeDetailResult
-import com.tik.server.dto.ResumeResult
+import com.tik.server.dto.*
 import com.tik.server.service.ResumeService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -26,6 +23,17 @@ class ResumeController(
     )
     fun saveResume(@AuthenticationPrincipal user: CustomUser, @RequestBody request: ResumeCreateRequest): BaseResponse<List<ResumeResult>> {
         val response = resumeService.saveResume(request, user.userId)
+        return BaseResponse(data = response)
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(
+        summary = "이력서 수정",
+        description = "이력서 수정 API입니다."
+    )
+    fun modifyResume(@RequestBody request: ResumeModifyRequest): BaseResponse<ResumeDetailResult> {
+        val response = resumeService.modifyResume(request)
         return BaseResponse(data = response)
     }
 
