@@ -11,6 +11,8 @@ import kotlinx.coroutines.withContext
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDateTime
+import kotlin.math.ceil
+import kotlin.math.floor
 
 @Service
 class InterviewService(
@@ -37,8 +39,8 @@ class InterviewService(
                     jobDescription = request.jobDescription,
                     interviewName = request.interviewName,
                     company = request.company,
-                    resumeQuestion = request.options.resumeQuestion,
-                    jdQuestion = request.options.jdQuestion,
+                    resumeQuestion = ceil(request.options.resumeQuestion * 1.0 / 2).toInt(),
+                    jdQuestion = floor(request.options.resumeQuestion * 1.0 / 2).toInt(),
                     csQuestion = request.options.csQuestion
                 )
             )
@@ -50,8 +52,8 @@ class InterviewService(
                 techStack = arrayListOf(techStack),
                 jobDescription = arrayListOf(request.jobDescription),
                 options = LlmClient.InitInterview.Options(
-                    resumeQuestion = request.options.resumeQuestion,
-                    jdQuestion = request.options.jdQuestion,
+                    resumeQuestion = ceil(request.options.resumeQuestion * 1.0 / 2).toInt(),
+                    jdQuestion = floor(request.options.resumeQuestion * 1.0 / 2).toInt(),
                     csQuestion = request.options.csQuestion
                 )
             )

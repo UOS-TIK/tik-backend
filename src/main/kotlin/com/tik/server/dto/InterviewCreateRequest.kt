@@ -21,7 +21,6 @@ class InterviewCreateRequest {
 
     class Option (
         var resumeQuestion: Int,
-        var jdQuestion: Int,
         var csQuestion: Int
     )
 }
