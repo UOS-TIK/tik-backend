@@ -1,7 +1,6 @@
 package com.tik.server.repository
 
 import com.tik.server.entity.Resume
-import jdk.jfr.Enabled
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
