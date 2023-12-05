@@ -36,14 +36,15 @@ class ResumeService(
             }
             projectTechStackRepository.saveAll(projectTechStackList)
         }
-        return resumeRepository.findAllByMemberIdAndEnabled(memberId, true).map {
+        return resumeRepository.findAllByMemberIdAndEnabledOrderByIdDesc(memberId, true).map {
             ResumeResult.from(it)
         }
     }
 
     @Transactional
-    fun modifyResume(request: ResumeModifyRequest): ResumeDetailResult {
-        val resume = resumeRepository.findByIdAndEnabled(request.resumeId.toInt(), true)
+    fun modifyResume(memberId: Int, request: ResumeModifyRequest): List<ResumeResult> {
+        val resume = resumeRepository.findByIdAndEnabled(request.resumeId.toInt(), true).orElse(null)
+            ?: throw IllegalStateException("이력서가 존재하지 않습니다.")
         resume.updateResume(request.name, request.introduction)
         val projectList = projectRepository.findAllByResumeId(request.resumeId.toInt()).map { it.id }
         projectRepository.deleteAllByIds(projectList)
@@ -57,11 +58,13 @@ class ResumeService(
             projectTechStackRepository.saveAll(projectTechStackList)
         }
         resumeRepository.save(resume)
-        return ResumeDetailResult.from(resume)
+        return resumeRepository.findAllByMemberIdAndEnabledOrderByIdDesc(memberId, true).map {
+            ResumeResult.from(it)
+        }
     }
 
     fun findAllResume(memberId: Int): List<ResumeResult> {
-        return resumeRepository.findAllByMemberIdAndEnabled(memberId, true).map {
+        return resumeRepository.findAllByMemberIdAndEnabledOrderByIdDesc(memberId, true).map {
             ResumeResult.from(it)
         }
     }
@@ -85,11 +88,14 @@ class ResumeService(
     }
 
     @Transactional
-    fun disableResume(resumeId: Int) {
-        var resume: Resume = resumeRepository.findById(resumeId).orElse(null)
+    fun disableResume(memberId: Int, resumeId: Int): List<ResumeResult> {
+        val resume = resumeRepository.findById(resumeId).orElse(null)
             ?: throw IllegalStateException("이력서가 존재하지 않습니다.")
         resume.softDeleteResume()
         resumeRepository.save(resume)
+        return resumeRepository.findAllByMemberIdAndEnabledOrderByIdDesc(memberId, true).map {
+            ResumeResult.from(it)
+        }
     }
 
     @Transactional

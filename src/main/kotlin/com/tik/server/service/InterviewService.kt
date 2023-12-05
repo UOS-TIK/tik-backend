@@ -20,7 +20,7 @@ class InterviewService(
     private val resumeRepository: ResumeRepository,
     private val interviewHistoryRepository: InterviewHistoryRepository,
 ) {
-    @Transactional
+    @Transactional(rollbackFor = [Exception::class])
     suspend fun initInterview(request: InterviewCreateRequest): InterviewCreateResponse {
         val resume = withContext(IO) {
             resumeRepository.findById(request.resumeId.toInt()).orElse(null)
