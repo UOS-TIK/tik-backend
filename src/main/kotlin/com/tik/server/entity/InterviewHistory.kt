@@ -36,8 +36,8 @@ class InterviewHistory(
     @Column(name = "comment")
     var comment: String? = null
 
-    @Column(name = "begin_time")
-    var beginTime: LocalDateTime? = null
+    @Column(name = "begin_time", updatable = false)
+    var beginTime: LocalDateTime? = LocalDateTime.now()
 
     @Column(name = "end_time")
     var endTime: LocalDateTime? = null
