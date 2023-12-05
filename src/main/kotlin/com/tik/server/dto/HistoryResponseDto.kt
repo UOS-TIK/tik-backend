@@ -6,6 +6,7 @@ import java.time.LocalDateTime
 
 data class HistoryResponseList (
     val interviewHistoryId: Int,
+    val interviewName: String?,
     val company: String,
     val beginTime: LocalDateTime?
 ) {
@@ -13,6 +14,7 @@ data class HistoryResponseList (
         fun from(interviewHistory: InterviewHistory): HistoryResponseList {
             return HistoryResponseList(
                 interviewHistoryId = interviewHistory.id,
+                interviewName = interviewHistory.interviewName,
                 company = interviewHistory.company,
                 beginTime = interviewHistory.beginTime
             )

@@ -18,7 +18,8 @@ class HistoryController(
     @GetMapping("/list")
     fun searchHistoryList(): BaseResponse<List<HistoryResponseList>> {
         val userId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
-        val response = historyService.searchHistoryList(userId)
+        val historyList = historyService.searchHistoryList(userId)
+        val response = historyList.sortedByDescending { it.interviewHistoryId }
         return BaseResponse(data = response)
     }
 
