@@ -32,8 +32,8 @@ class ResumeController(
         summary = "이력서 수정",
         description = "이력서 수정 API입니다."
     )
-    fun modifyResume(@RequestBody request: ResumeModifyRequest): BaseResponse<ResumeDetailResult> {
-        val response = resumeService.modifyResume(request)
+    fun modifyResume(@AuthenticationPrincipal user: CustomUser, @RequestBody request: ResumeModifyRequest): BaseResponse<List<ResumeResult>> {
+        val response = resumeService.modifyResume(user.userId, request)
         return BaseResponse(data = response)
     }
 
@@ -60,13 +60,14 @@ class ResumeController(
     }
 
     @PatchMapping("/disable/{resumeId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     @Operation(
         summary = "이력서 비활성화",
         description = "이력서를 추후 사용 및 조회할 수 없도록 비활성화 하는 API입니다."
     )
-    fun disableResume(@PathVariable resumeId: Int) {
-        resumeService.disableResume(resumeId)
+    fun disableResume(@AuthenticationPrincipal user: CustomUser, @PathVariable resumeId: Int): BaseResponse<List<ResumeResult>> {
+        val response = resumeService.disableResume(user.userId, resumeId)
+        return BaseResponse(data = response)
     }
 
 }
