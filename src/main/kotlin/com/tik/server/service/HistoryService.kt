@@ -39,7 +39,7 @@ class HistoryService (
             resumeQuestion = interviewHistory.resumeQuestion,
             jdQuestion = interviewHistory.jdQuestion,
             csQuestion = interviewHistory.csQuestion,
-            score = interviewHistory.score!!,
+            score = interviewHistory.score,
             script = interviewHistory.script,
             comment = interviewHistory.comment,
             beginTime = interviewHistory.beginTime,

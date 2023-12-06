@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 data class HistoryResponseList (
     val interviewHistoryId: Int,
     val interviewName: String?,
-    val company: String,
+    val company: String?,
     val beginTime: LocalDateTime?
 ) {
     companion object {
@@ -51,16 +51,16 @@ data class HistoryResponseList (
     data class HistoryResponseView(
         val interviewHistoryId: Int,
         val resume: Int?,
-        val jobDescription: String,
+        val jobDescription: String?,
         val resumeQuestion: Int?,
         val jdQuestion: Int?,
         val csQuestion: Int?,
         val score: Int?,
-        val interviewName: String,
-        val company: String,
+        val interviewName: String?,
+        val company: String?,
         val script: String?,
         val comment: String?,
         val beginTime: LocalDateTime?,
         val endTime: LocalDateTime?,
-        val question : List<List<QuestionView>>
+        val question : List<List<QuestionView>>?
     )
