@@ -50,6 +50,7 @@ data class HistoryResponseList (
 */
     data class HistoryResponseView(
         val interviewHistoryId: Int,
+        val occupation: String?,
         val resume: Int?,
         val jobDescription: String?,
         val resumeQuestion: Int?,
