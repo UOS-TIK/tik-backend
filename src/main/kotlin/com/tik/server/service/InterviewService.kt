@@ -39,6 +39,7 @@ class InterviewService(
                     jobDescription = request.jobDescription,
                     interviewName = request.interviewName,
                     company = request.company,
+                    occupation = request.occupation,
                     resumeQuestion = ceil(request.options.resumeQuestion * 1.0 / 2).toInt(),
                     jdQuestion = floor(request.options.resumeQuestion * 1.0 / 2).toInt(),
                     csQuestion = request.options.csQuestion
