@@ -15,6 +15,8 @@ class InterviewHistory(
     var interviewName: String,
     @Column(name = "company")
     var company: String,
+    @Column(name = "occupation")
+    var occupation: String,
     @Column(name = "resume_question")
     var resumeQuestion: Int?,
     @Column(name = "jd_question")
