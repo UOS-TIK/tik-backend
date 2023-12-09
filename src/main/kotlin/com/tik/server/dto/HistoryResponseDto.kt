@@ -8,7 +8,11 @@ data class HistoryResponseList (
     val interviewHistoryId: Int,
     val interviewName: String?,
     val company: String?,
-    val beginTime: LocalDateTime?
+    val beginTime: LocalDateTime?,
+    val endTime: LocalDateTime?,
+    val score: Int?,
+    val comment: String?,
+    val resumeId: Int?
 ) {
     companion object {
         fun from(interviewHistory: InterviewHistory): HistoryResponseList {
@@ -16,38 +20,16 @@ data class HistoryResponseList (
                 interviewHistoryId = interviewHistory.id,
                 interviewName = interviewHistory.interviewName,
                 company = interviewHistory.company,
-                beginTime = interviewHistory.beginTime
+                beginTime = interviewHistory.beginTime,
+                endTime = interviewHistory.endTime,
+                score = interviewHistory.score,
+                comment = interviewHistory.comment,
+                resumeId = interviewHistory.resume.id
             )
         }
     }
 }
-/*
-    data class HistoryResponse(
-        val interviewHistoryId: Int,
-        val resume: String,
-        val jobDescription: String,
-        val company: String,
-        val script: String?,
-        val comment: String?,
-        val beginTime: LocalDateTime?,
-        val endTime: LocalDateTime?
-    ) {
-        companion object {
-            fun from(interviewHistory: InterviewHistory): HistoryResponse {
-                return HistoryResponse(
-                    interviewHistoryId = interviewHistory.id,
-                    resume = interviewHistory.resume.name,
-                    jobDescription = interviewHistory.jobDescription,
-                    company = interviewHistory.company,
-                    script = interviewHistory.script,
-                    comment = interviewHistory.comment,
-                    beginTime = interviewHistory.beginTime,
-                    endTime = interviewHistory.endTime,
-                )
-            }
-        }
-    }
-*/
+
     data class HistoryResponseView(
         val interviewHistoryId: Int,
         val occupation: String?,
